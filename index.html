@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Change the title</title>
+    <meta name="description" content="Our first page" />
+  </head>
+  <body>
+    <div>
+      <div></div>
+
+      <div class="changing-title">
+        <input checked name="title" type="radio" id="rotating">
+        <label class="panel" for="rotating">Rotating title</label>
+        <input name="title" type="radio" id="sliding">
+        <label class="panel" for="sliding">Sliding title</label>
+        <div class="panel">
+          <table style="width:100%" class="rotating-title">
+            <tr>
+              <th>Text</th>
+              <th class="input">Time (ms)</th>
+            </tr>
+            <tr>
+              <td><input type="text"></input></td>
+              <td><input type="text"></input></td>
+            </tr>
+          </table>
+          <button class="rotating-title" onclick="addRow('rotating-title')">Add Row</button>
+          <table class="sliding-title">
+            <tr>
+              <th>Text</th>
+              <th>Time (ms)</th>
+            </tr>
+            <tr>
+              <td><input type="text"></input></td>
+              <td><input type="text"></input></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <button onclick="execute()" id="start">Start</button>
+      <button class="invisible" onclick="terminate()" id="stop">Stop</button>
+    </div>
+  </body>
+  <script type="module" src="index.js"></script>
+  <style>
+    body {
+      background-color: aliceblue;
+    }
+
+    .panel {
+      width: fit-content;
+      border-radius: 10px;
+      
+      padding: 10px;
+      background-color: white;
+      box-shadow: rgb(38, 57, 77) 0px 6px 16px -8px;
+    }
+
+    button {
+      width: 70px;
+      margin: 5px;
+    }
+
+    .error {
+      border-color: red;
+    }
+
+    .changing-title {
+      padding: 10px;
+    }
+
+    .changing-title .panel {
+      margin-top: 25px;
+    }
+    
+    .invisible {
+      display: none;
+    }
+
+    td input {
+      width: 400px;
+    }
+
+    td + td input {
+      width: 60px;
+    }
+
+    input[type="radio"], .rotating-title, .sliding-title {
+      display: none;
+    }
+
+    input#rotating:checked ~ * .rotating-title,
+    input#sliding:checked ~ * .sliding-title {
+      display: block;
+    }
+
+    label:hover {
+      background-color: grey;
+    }
+
+    input#rotating:checked ~ label[for="rotating"],
+    input#sliding:checked ~ label[for="sliding"] {
+      transform: scale(0.9);
+      box-shadow: none;
+      background-color: lightblue;
+      border-style: solid;
+    }
+  </style>
+</html>
