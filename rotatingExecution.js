@@ -1,16 +1,16 @@
-export default class TitleChanger {
+export default class RotatingExecution {
     constructor() {
         this.active = false;
     }
 
-    async startRotatingTitles(titlesList) {
+    async startExecution(functionsConfig) {
         this.active = true;
 
         let i = 0;
         while(this.active) {
-            const title = titlesList[i%titlesList.length];
-            document.title = title.txt;
-            await this.sleep(title.duration);
+            const currentConfig = functionsConfig[i%functionsConfig.length];
+            currentConfig.function();
+            await this.sleep(currentConfig.pause);
             i++;
         }
     }

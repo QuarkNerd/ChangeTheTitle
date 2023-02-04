@@ -1,23 +1,16 @@
-import TitleChanger from './titleChanger.js';
-import TitleSlider from './titleSlider.js';
+import RotatingExecution from './rotatingExecution.js';
 
-const titleChanger = new TitleChanger();
-const titleSlider = new TitleSlider();
+const titleChanger = new RotatingExecution();
 const startButton = document.querySelector('#start');
 const stopButton = document.querySelector('#stop');
+const roatingCheckbox = document.getElementById('rotating');
+const ERROR = 'ERROR';
 
 window.execute = function execute() {
-
-    if (document.getElementById('rotating').checked) {
-        const rotatingTitles = getConfigFromTable('rotating-title');
-        if (rotatingTitles == 'ERROR') return;
-        titleChanger.startRotatingTitles(rotatingTitles);
-    } else {
-        const config = getConfigFromTable('sliding-title')[0];
-        if (config == 'ERROR') return;
-        titleSlider.startSlidingTitle(config);
-
-    }
+    const getTitleConfig = roatingCheckbox.checked ? getRotatingTitleConfig : getSlidingTitleConfig;
+    const titleConfig = getTitleConfig();
+    if (titleConfig == ERROR) return;
+    titleChanger.startExecution(titleConfig);
 
     startButton.classList.add('invisible');
     stopButton.classList.remove('invisible');
@@ -36,7 +29,27 @@ window.addRow = function addRow(cls) {
     document.querySelector('table.' + cls).appendChild(row);
 }
 
-function getConfigFromTable(cls) {
+function getRotatingTitleConfig() {
+    const data = getDataFromTable('rotating-title');
+    if (data === ERROR) return ERROR;
+    return data.map(x => ({
+        function: () => document.title = x.txt,
+        pause: x.pause
+    }))
+}
+
+function getSlidingTitleConfig() {
+    const data = getDataFromTable('sliding-title')[0];
+    if (data === ERROR) return ERROR;
+    const {txt, pause} = data;
+
+    return [...Array(txt.length + 1)].map((_, i) => ({
+        function: () => document.title = txt.substring(i),
+        pause
+    }))
+}
+
+function getDataFromTable(cls) {
     let error = false;
     const config = [...document.querySelectorAll(`table.${cls} tr`)].slice(1).map(row => {
         const inputs = row.querySelectorAll('input');
@@ -49,10 +62,9 @@ function getConfigFromTable(cls) {
         }
         return {
             txt: inputs[0].value,
-            duration: time
+            pause: time
         }
     });
-    if (error) return 'ERROR';
-    console.log(config);
-    return config.filter(item => item.duration);
+    if (error) return ERROR;
+    return config.filter(item => item.pause);
 }
