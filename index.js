@@ -23,10 +23,23 @@ window.terminate = function terminate() {
     titleSlider.terminate();
 }
 
+window.loadImage = async function loadImage(event) {
+    console.log(234234);
+    const element = event.target;
+    const url = await getFaviconUrl(element.value);
+    element.parentElement.parentElement.querySelector('img').src = url;
+}
+
 window.addRow = function addRow(cls) {
     const row = document.createElement('tr');
-    row.innerHTML = '<td><input type="text"></input></td><td><input type="text"></input></td>'
+    row.innerHTML = cls === 'changing-icon' ? 
+            '<td><img></td><td><input onfocusout="loadImage(event)" type="text"></input></td><td><input class="time" type="text"></input></td><td onclick="deleteRow(event)">X</td>'
+            : '<td><input type="text"></input></td><td><input class="time" type="text"></input></td><td onclick="deleteRow(event)">X</td>';
     document.querySelector('table.' + cls).appendChild(row);
+}
+
+window.deleteRow = function deleteRow(e) {
+    e.target.parentElement.remove();
 }
 
 function getRotatingTitleConfig() {
@@ -67,4 +80,15 @@ function getDataFromTable(cls) {
     });
     if (error) return ERROR;
     return config.filter(item => item.pause);
+}
+
+async function getFaviconUrl(url) {    
+    const http = 'https://';
+    if (!url.startsWith('http')) url = http + url;
+    const { hostname } = new URL(url);
+    const res = await fetch(`http://favicongrabber.com/api/grab/${hostname}`)
+    const json = await res.json();
+    const link = json.icons[0].src;
+    if (!link) throw new Error('Failed to get favicon');
+	return link;
 }

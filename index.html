@@ -14,12 +14,16 @@
           <div class="panel">
             <table style="width:100%" class="changing-icon">
               <tr>
-                <th>Icon URL</th>
+                <th></th>
+                <th>Website URL</th>
                 <th>Time (ms)</th>
+                <th>Delete</th>
               </tr>
               <tr>
-                <td><input type="text"></input></td>
-                <td><input type="text"></input></td>
+                <td><img></td>
+                <td><input onfocusout="loadImage(event)" type="text"></input></td>
+                <td><input class="time" type="text"></input></td>
+                <td onclick="deleteRow(event)">X</td>
               </tr>
             </table>
             <button class="changing-icon" onclick="addRow('changing-icon')">Add Row</button>
@@ -35,10 +39,12 @@
               <tr>
                 <th>Text</th>
                 <th>Time (ms)</th>
+                <th>Delete</th>
               </tr>
               <tr>
                 <td><input type="text"></input></td>
-                <td><input type="text"></input></td>
+                <td><input class="time" type="text"></input></td>
+                <td onclick="deleteRow(event)">X</td>
               </tr>
             </table>
             <button class="rotating-title" onclick="addRow('rotating-title')">Add Row</button>
@@ -49,7 +55,7 @@
               </tr>
               <tr>
                 <td><input type="text"></input></td>
-                <td><input type="text"></input></td>
+                <td><input class="time" type="text"></input></td>
               </tr>
             </table>
           </div>
@@ -85,16 +91,12 @@
     }
 
     button {
-      width: 70px;
+      width: 80px;
       margin: 5px;
     }
 
     .error {
       border-color: red;
-    }
-
-    .changing-title {
-      /* padding: 10px; */
     }
     
     .invisible {
@@ -111,11 +113,15 @@
       text-align: center;
     }
 
+    td {
+      text-align: center;
+    }
+
     td input {
       width: 400px;
     }
 
-    td + td input {
+    td input.time {
       width: 60px;
     }
 
@@ -139,6 +145,12 @@
       box-shadow: none;
       background-color: lightblue;
       border-style: solid;
+    }
+
+    img {
+      height: 21px;
+      width: 21px;
+      margin-top: 4px;
     }
   </style>
 </html>
