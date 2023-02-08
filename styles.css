@@ -1,0 +1,89 @@
+body {
+    background-color: aliceblue;
+}
+
+.changer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.panel {
+    width: fit-content;
+    margin: 10px;
+}
+
+.panel {
+    border-radius: 10px;
+
+    padding: 10px;
+    background-color: white;
+    box-shadow: rgb(38, 57, 77) 0px 6px 16px -8px;
+}
+
+button {
+    width: 80px;
+    margin: 5px;
+}
+
+.error {
+    border-color: red;
+}
+
+.invisible {
+    display: none;
+}
+
+label {
+    display: inline-block;
+    width: 100px;
+    height: 20px;
+    margin: 10px 2px;
+
+    line-height: 20px;
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+td input {
+    width: 400px;
+}
+
+td input.time {
+    width: 60px;
+}
+
+input[type="radio"], .rotating-title, .sliding-title {
+    display: none;
+}
+
+input#rotating:checked ~ * .rotating-title,
+input#sliding:checked ~ * .sliding-title {
+    display: block;
+}
+
+label:hover {
+    background-color: grey;
+}
+
+input#rotating:checked ~ label[for="rotating"],
+input#sliding:checked ~ label[for="sliding"],
+label[for="icon"] {
+    transform: scale(0.9);
+    box-shadow: none;
+    background-color: lightblue;
+    border-style: solid;
+}
+
+img {
+    height: 21px;
+    width: 21px;
+    margin-top: 4px;
+}
+
+img.loading {
+    border-style: solid;
+    box-sizing: border-box;
+}

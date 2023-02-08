@@ -17,7 +17,6 @@ window.execute = function execute() {
 
     startButton.classList.add('invisible');
     stopButton.classList.remove('invisible');
-
 }
 
 window.terminate = function terminate() {
