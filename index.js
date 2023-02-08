@@ -70,7 +70,9 @@ function setUpChangingIconConfig() {
     });
     if (error) return ERROR;
 
-    return config.map(x => ({
+    return config
+        .filter(x => x.pause)
+        .map(x => ({
         function: () => {
             document.querySelector("link[rel~='icon']")?.remove();
             const link = document.createElement('link');
