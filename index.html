@@ -6,8 +6,6 @@
   </head>
   <body>
     <div>
-      <div class="panel icons-holder"></div>
-
       <div class="changer">
         <div class="changing-icons">
           <label class="panel" for="icon">Changing icon</label>
@@ -15,13 +13,13 @@
             <table style="width:100%" class="changing-icon">
               <tr>
                 <th></th>
-                <th>Website URL</th>
+                <th>Website URL (Works off domatin)</th>
                 <th>Time (ms)</th>
                 <th>Delete</th>
               </tr>
               <tr>
                 <td><img></td>
-                <td><input onfocusout="loadImage(event)" type="text"></input></td>
+                <td><input onfocusout="loadImage(this)" type="text"></input></td>
                 <td><input class="time" type="text"></input></td>
                 <td onclick="deleteRow(event)">X</td>
               </tr>
@@ -151,6 +149,11 @@
       height: 21px;
       width: 21px;
       margin-top: 4px;
+    }
+
+    img.loading {
+      border-style: solid;
+      box-sizing: border-box;
     }
   </style>
 </html>

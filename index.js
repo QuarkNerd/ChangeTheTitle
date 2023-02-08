@@ -1,6 +1,7 @@
 import RotatingExecution from './rotatingExecution.js';
 
 const titleChanger = new RotatingExecution();
+const iconChanger = new RotatingExecution();
 const startButton = document.querySelector('#start');
 const stopButton = document.querySelector('#stop');
 const roatingCheckbox = document.getElementById('rotating');
@@ -9,37 +10,76 @@ const ERROR = 'ERROR';
 window.execute = function execute() {
     const getTitleConfig = roatingCheckbox.checked ? getRotatingTitleConfig : getSlidingTitleConfig;
     const titleConfig = getTitleConfig();
-    if (titleConfig == ERROR) return;
+    const faviconConfig = setUpChangingIconConfig();
+    if (titleConfig === ERROR || faviconConfig === ERROR) return;
     titleChanger.startExecution(titleConfig);
+    iconChanger.startExecution(faviconConfig);
 
     startButton.classList.add('invisible');
     stopButton.classList.remove('invisible');
+
 }
 
 window.terminate = function terminate() {
     stopButton.classList.add('invisible');
     startButton.classList.remove('invisible');
     titleChanger.terminate();
-    titleSlider.terminate();
+    iconChanger.terminate();
 }
 
-window.loadImage = async function loadImage(event) {
-    console.log(234234);
-    const element = event.target;
-    const url = await getFaviconUrl(element.value);
-    element.parentElement.parentElement.querySelector('img').src = url;
+window.loadImage = async function loadImage(element) {
+    const td = element.parentElement.parentElement.querySelector('td')
+    td.querySelector('img').remove();
+    const img = document.createElement('img');
+    td.appendChild(img);
+
+    try {
+        img.src = await getFaviconUrl(element.value);
+    } catch {}
 }
 
 window.addRow = function addRow(cls) {
     const row = document.createElement('tr');
     row.innerHTML = cls === 'changing-icon' ? 
-            '<td><img></td><td><input onfocusout="loadImage(event)" type="text"></input></td><td><input class="time" type="text"></input></td><td onclick="deleteRow(event)">X</td>'
-            : '<td><input type="text"></input></td><td><input class="time" type="text"></input></td><td onclick="deleteRow(event)">X</td>';
+            '<td><img></td><td><input onfocusout="loadImage(this)" type="text"></input></td>'
+            : '<td><input type="text"></input></td>';
+    row.innerHTML += '<td><input class="time" type="text"></input></td><td onclick="deleteRow(event)">X</td>';
     document.querySelector('table.' + cls).appendChild(row);
 }
 
 window.deleteRow = function deleteRow(e) {
     e.target.parentElement.remove();
+}
+
+function setUpChangingIconConfig() {
+    let error = false;
+    const config = [...document.querySelectorAll(`table.changing-icon tr`)].slice(1).map(row => {
+        const img = row.querySelector('img');
+
+        const timeInput = row.querySelector('input.time');
+        const time = timeInput.value ? parseInt(timeInput.value) : 0;
+        timeInput.classList.remove('error');
+        if (Number.isNaN(time)) {
+            timeInput.classList.add('error');
+            error = true;
+        }
+        return {
+            src: img.src,
+            pause: time
+        }
+    });
+    if (error) return ERROR;
+
+    return config.map(x => ({
+        function: () => {
+            document.querySelector("link[rel~='icon']")?.remove();
+            const link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+            link.href = x.src;
+        },
+        pause: x.pause
+    }))
 }
 
 function getRotatingTitleConfig() {
