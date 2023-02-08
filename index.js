@@ -126,7 +126,7 @@ async function getFaviconUrl(url) {
     const http = 'https://';
     if (!url.startsWith('http')) url = http + url;
     const { hostname } = new URL(url);
-    const res = await fetch(`http://favicongrabber.com/api/grab/${hostname}`)
+    const res = await fetch(`https://favicongrabber.com/api/grab/${hostname}`)
     const json = await res.json();
     const link = json.icons[0].src;
     if (!link) throw new Error('Failed to get favicon');
