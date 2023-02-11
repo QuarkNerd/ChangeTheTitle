@@ -1,6 +1,8 @@
 An app to animate the title bar/tab bar to confuse your friends peering at your screen.
 For example, make it look like a specific site is sending you a specific notification
 
+Go [here](https://quarknerd.github.io/ChangeTheTitle/)
+
 ## How to use
 
 1. Add URL of the website's Icon you want to use
