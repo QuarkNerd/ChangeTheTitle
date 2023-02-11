@@ -135,17 +135,17 @@ function getDataFromTable(cls) {
     return config.filter(item => item.pause);
 }
 
+const cachedFaviconURLs = {};
+
 async function getFaviconUrls(url) {    
     const http = 'https://';
     if (!url.startsWith('http')) url = http + url;
     const { hostname } = new URL(url);
+    if (cachedFaviconURLs[hostname]) return cachedFaviconURLs[hostname];
     const res = await fetch(`https://favicongrabber.com/api/grab/${hostname}`)
     const json = await res.json();
     const links = json.icons.map(x => x?.src).filter(x => x);
-    console.log(links);
     if (!links.length) throw new Error('Failed to get favicon');
+    cachedFaviconURLs[hostname] = links;
 	return links;
 }
-
-
-// Add caching urls
