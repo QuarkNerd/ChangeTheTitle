@@ -26,21 +26,28 @@ window.terminate = function terminate() {
     iconChanger.terminate();
 }
 
-window.loadImage = async function loadImage(element) {
-    const td = element.parentElement.parentElement.querySelector('td')
-    td.querySelector('img').remove();
-    const img = document.createElement('img');
-    td.appendChild(img);
-
+window.loadImages = async function loadImages(element) {
+    const td = element.parentElement.parentElement.querySelector('.icons')
+    let urls;
     try {
-        img.src = await getFaviconUrl(element.value);
-    } catch {}
+        urls = await getFaviconUrls(element.value);
+    } catch {
+        return;
+    }
+    td.querySelectorAll('img').forEach(element  => element.remove());
+    urls.forEach(url => {
+        const img = document.createElement('img');
+        td.appendChild(img);
+        img.src = url
+        img.addEventListener('click', selectImg);
+    });
+    td.querySelector('img').classList.add('selected');
 }
 
 window.addRow = function addRow(cls) {
     const row = document.createElement('tr');
     row.innerHTML = cls === 'changing-icon' ? 
-            '<td><img></td><td><input onfocusout="loadImage(this)" type="text"></input></td>'
+            '<td><input onfocusout="loadImages(this)" class="website" type="text"></input></td><td class="icons"></td>'
             : '<td><input type="text"></input></td>';
     row.innerHTML += '<td><input class="time" type="text"></input></td><td onclick="deleteRow(event)">X</td>';
     document.querySelector('table.' + cls).appendChild(row);
@@ -50,10 +57,15 @@ window.deleteRow = function deleteRow(e) {
     e.target.parentElement.remove();
 }
 
+function selectImg({target}) {
+    target.parentElement.querySelector('.selected').classList.remove('selected');
+    target.classList.add('selected');
+}
+
 function setUpChangingIconConfig() {
     let error = false;
     const config = [...document.querySelectorAll(`table.changing-icon tr`)].slice(1).map(row => {
-        const img = row.querySelector('img');
+        const img = row.querySelector('img.selected');
 
         const timeInput = row.querySelector('input.time');
         const time = timeInput.value ? parseInt(timeInput.value) : 0;
@@ -123,13 +135,17 @@ function getDataFromTable(cls) {
     return config.filter(item => item.pause);
 }
 
-async function getFaviconUrl(url) {    
+async function getFaviconUrls(url) {    
     const http = 'https://';
     if (!url.startsWith('http')) url = http + url;
     const { hostname } = new URL(url);
     const res = await fetch(`https://favicongrabber.com/api/grab/${hostname}`)
     const json = await res.json();
-    const link = json.icons[0].src;
-    if (!link) throw new Error('Failed to get favicon');
-	return link;
+    const links = json.icons.map(x => x?.src).filter(x => x);
+    console.log(links);
+    if (!links.length) throw new Error('Failed to get favicon');
+	return links;
 }
+
+
+// Add caching urls

@@ -13,14 +13,14 @@
           <div class="panel">
             <table style="width:100%" class="changing-icon">
               <tr>
-                <th></th>
                 <th>Website/Domain URL</th>
+                <th>Choose icon</th>
                 <th>Time (ms)</th>
                 <th>Delete</th>
               </tr>
               <tr>
-                <td><img></td>
-                <td><input onfocusout="loadImage(this)" type="text"></input></td>
+                <td><input onfocusout="loadImages(this)" class="website" type="text"></input></td>
+                <td class="icons"></td>
                 <td><input class="time" type="text"></input></td>
                 <td onclick="deleteRow(event)">X</td>
               </tr>

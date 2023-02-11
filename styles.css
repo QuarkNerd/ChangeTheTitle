@@ -51,7 +51,11 @@ td input {
     width: 400px;
 }
 
-td input.time {
+.website {
+    width: 200px;
+}
+
+.time {
     width: 60px;
 }
 
@@ -81,9 +85,9 @@ img {
     height: 21px;
     width: 21px;
     margin-top: 4px;
+    margin-left: 4px;
 }
 
-img.loading {
+img.selected {
     border-style: solid;
-    box-sizing: border-box;
 }
